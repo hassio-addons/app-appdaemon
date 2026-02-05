@@ -1,12 +1,12 @@
 #!/command/with-contenv bashio
 # shellcheck shell=bash
 # ==============================================================================
-# Home Assistant Community Add-on: AppDaemon
+# Home Assistant Community App: AppDaemon
 # Configures AppDaemon
 # ==============================================================================
 
-# Migrate add-on data from the Home Assistant config folder,
-# to the add-on configuration folder.
+# Migrate app data from the Home Assistant config folder,
+# to the app configuration folder.
 if ! bashio::fs.file_exists '/config/appdaemon.yaml' \
     && bashio::fs.file_exists '/homeassistant/appdaemon/appdaemon.yaml'; then
     shopt -s dotglob
