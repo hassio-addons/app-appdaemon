@@ -1,7 +1,7 @@
 #!/command/with-contenv bashio
 # shellcheck shell=bash
 # ==============================================================================
-# Home Assistant Community Add-on: AppDaemon
+# Home Assistant Community App: AppDaemon
 # Take down the S6 supervision tree when AppDaemon fails
 # ==============================================================================
 declare exit_code
