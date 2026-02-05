@@ -19,10 +19,10 @@ RUN \
         python3-dev=3.12.12-r0 \
     \
     && apk add --no-cache \
-        py3-pip=25.1.1-r0 \
+        py3-pip=25.1.1-r1 \
         py3-wheel=0.46.1-r0 \
         python3=3.12.12-r0 \
-        yq-go=4.47.2-r2 \
+        yq-go=4.49.2-r2 \
     \
     && pip install -r /tmp/requirements.txt \
     \
