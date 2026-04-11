@@ -22,7 +22,7 @@ RUN \
         py3-pip=25.1.1-r1 \
         py3-wheel=0.46.3-r0 \
         python3=3.12.13-r0 \
-        yq-go=4.49.2-r4 \
+        yq-go=4.49.2-r5 \
     \
     && pip install -r /tmp/requirements.txt \
     \
