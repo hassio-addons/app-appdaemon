@@ -19,7 +19,7 @@ while [[ ${waited} -lt 300 ]]; do
         curl -s -m 10 \
             -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" \
             "http://supervisor/core/api/config" \
-        | jq -r '.state // empty' \
+        | jq -r '(.state // empty) | ascii_downcase' 2>/dev/null \
     ) || core_state=""
 
     if [[ "${core_state}" = "running" ]]; then
