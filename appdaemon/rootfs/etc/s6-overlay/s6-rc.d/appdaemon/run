@@ -6,6 +6,40 @@
 # ==============================================================================
 declare log_level
 
+# Wait for Home Assistant to have finished starting.
+#
+# AppDaemon connects and authenticates as soon as the Core websocket accepts
+# it, but a subscribe_events sent while Core is still loading integrations
+# times out after 10s and is not retried. AppDaemon then keeps running without
+# ever receiving events, until it is restarted by hand.
+declare -i waited=0
+declare core_state
+while [[ ${waited} -lt 300 ]]; do
+    core_state=$(\
+        curl -s -m 10 \
+            -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" \
+            "http://supervisor/core/api/config" \
+        | jq -r '.state // empty' \
+    ) || core_state=""
+
+    if [[ "${core_state}" = "running" ]]; then
+        break
+    fi
+
+    if [[ ${waited} -eq 0 ]]; then
+        bashio::log.info \
+            "Waiting for Home Assistant to finish starting..."
+    fi
+
+    sleep 5
+    waited=$((waited + 5))
+done
+
+if [[ "${core_state}" != "running" ]]; then
+    bashio::log.warning \
+        "Home Assistant is not running after ${waited}s, starting anyway..."
+fi
+
 bashio::log.info "Starting AppDaemon..."
 
 # Find the matching Tor log level
