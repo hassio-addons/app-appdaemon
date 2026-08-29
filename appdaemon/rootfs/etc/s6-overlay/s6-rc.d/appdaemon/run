@@ -31,4 +31,4 @@ if bashio::config.has_value 'log_level'; then
 fi
 
 # Run the AppDaemon
-exec appdaemon -c /config -D "${log_level}"
+exec /opt/appdaemon/bin/appdaemon -c /config -D "${log_level}"

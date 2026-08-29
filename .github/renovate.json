@@ -20,33 +20,34 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["//Dockerfile$/"],
-      "matchStringsStrategy": "any",
-      "matchStrings": [
-        "\\s\\s(?<package>[a-z0-9][a-z0-9-_]+)=(?<currentValue>[a-z0-9-_.]+)\\s+"
-      ],
-      "versioningTemplate": "loose",
-      "datasourceTemplate": "repology",
-      "depNameTemplate": "alpine_3_23/{{package}}"
+      "matchStrings": ["ARG YQ_VERSION=[\"']?(?<currentValue>.+?)[\"']?\\s+"],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "mikefarah/yq",
+      "versioningTemplate": "loose"
     }
   ],
   "packageRules": [
     {
-      "matchDatasources": ["repology"],
+      "matchDatasources": ["github-releases"],
+      "matchDepNames": ["mikefarah/yq"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
-    },
-    {
-      "groupName": "Python",
-      "matchDatasources": ["repology"],
-      "automerge": true,
-      "matchDepNames": ["/^alpine.*/python.*/"]
-    },
-    {
-      "groupName": "App base image",
-      "matchDatasources": ["docker"]
     },
     {
       "groupName": "App base image",
       "matchDatasources": ["docker"],
+      "matchDepNames": ["ghcr.io/hassio-addons/debian-base"]
+    },
+    {
+      "groupName": "App base image",
+      "matchDatasources": ["docker"],
+      "matchDepNames": ["ghcr.io/hassio-addons/debian-base"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchDepNames": ["ghcr.io/astral-sh/uv"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     },

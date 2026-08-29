@@ -44,11 +44,11 @@ fi
 
 # Install user configured/requested packages
 if bashio::config.has_value 'system_packages'; then
-    apk update \
-        || bashio::exit.nok 'Failed updating Alpine packages repository indexes'
+    apt-get update \
+        || bashio::exit.nok 'Failed updating Debian packages repository indexes'
 
     for package in $(bashio::config 'system_packages'); do
-        apk add "$package" \
+        apt-get install -y --no-install-recommends "$package" \
             || bashio::exit.nok "Failed installing package ${package}"
     done
 fi
@@ -56,7 +56,7 @@ fi
 # Install user configured/requested Python packages
 if bashio::config.has_value 'python_packages'; then
     for package in $(bashio::config 'python_packages'); do
-        pip3 install "$package" \
+        uv pip install --python /opt/appdaemon/bin/python "$package" \
             || bashio::exit.nok "Failed installing package ${package}"
     done
 fi
