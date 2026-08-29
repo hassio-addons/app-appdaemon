@@ -12,11 +12,10 @@ on:
 
 permissions:
   actions: read
-  contents: write
+  contents: read
   packages: read
-  pull-requests: read
   security-events: write
 
 jobs:
   workflows:
-    uses: hassio-addons/workflows/.github/workflows/app-ci.yaml@3846ae0fd09acec8ac1ac308ceacd052b9d01bec # v2.0.6
+    uses: hassio-addons/workflows/.github/workflows/app-ci.yaml@e0c532a7b0fb264b3ff0c718c2c0308a0c8c1390 # v4.0.0
