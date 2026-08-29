@@ -1,23 +1,70 @@
 # Security Policy
 
-We take the security of this project seriously. We appreciate your efforts to
-responsibly disclose your findings and will make every effort to acknowledge
+The security of this project is taken seriously. We appreciate your efforts to
+responsibly disclose any findings and will make every effort to acknowledge
 your contributions.
+
+## Supported Versions
+
+Security updates are provided only for the latest released version of this
+app. Users are strongly encouraged to keep their installation up to date.
+
+| Version        | Supported          |
+| -------------- | ------------------ |
+| Latest release | :white_check_mark: |
+| Older releases | :x:                |
 
 ## Reporting a Vulnerability
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+**Please do not report security vulnerabilities through public GitHub issues,
+discussions, or pull requests.**
 
-If you discover a security vulnerability, please report it via GitHub's private
-vulnerability reporting:
+Instead, report them privately through GitHub's private vulnerability
+reporting:
 
-1. Navigate to the Security tab of this repository
-2. Click "Report a vulnerability"
-3. Provide a description of the vulnerability and steps to reproduce
+[**Report a vulnerability**](https://github.com/hassio-addons/app-appdaemon/security/advisories/new)
 
-After the initial report, we will keep you informed of the progress towards a
-fix and may ask for additional information or guidance.
+If for any reason you are unable to use GitHub's private vulnerability
+reporting, you may also reach out to the maintainer by email at
+[opensource@frenck.dev](mailto:opensource@frenck.dev).
 
-We aim to address reported vulnerabilities within 90 days.
+When reporting, please include as much of the following as possible:
 
-Thank you for helping keep this project secure!
+- A clear description of the vulnerability and its potential impact.
+- Steps to reproduce, or a proof of concept.
+- Affected version(s) of the app.
+- Any known mitigations or workarounds.
+
+## Disclosure Timeline
+
+- **Acknowledgement:** you will receive an acknowledgement of your report
+  within **48 hours**.
+- **Initial assessment:** a triage and initial severity assessment will be
+  shared within **7 days** of the acknowledgement.
+- **Fix and disclosure:** valid reports are targeted for resolution and
+  coordinated public disclosure within **90 days** of the initial report,
+  depending on complexity and impact.
+
+You will be kept informed throughout the process and credited in the release
+notes for the fix, unless you prefer to remain anonymous.
+
+## Out of Scope
+
+The following are **not** considered security vulnerabilities in this project:
+
+- Vulnerabilities in upstream or transitive dependencies. These are handled
+  continuously by [Renovate](https://github.com/renovatebot/renovate) and
+  addressed through regular dependency updates.
+- Issues in AppDaemon itself; please report those directly to the
+  [AppDaemon project](https://github.com/AppDaemon/appdaemon).
+- Issues in Home Assistant or its Supervisor; please report those through the
+  [Home Assistant security policy](https://github.com/home-assistant/core/security/policy).
+- Packages installed through the `system_packages` or `python_packages`
+  options. Those are selected and installed by the user, at their own risk.
+
+## Scope
+
+This security policy covers the AppDaemon app published from this repository
+as part of the
+[Home Assistant Community Add-ons](https://github.com/hassio-addons/repository)
+project.
