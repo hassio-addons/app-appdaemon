@@ -1,9 +1,20 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:20.1.1
+ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:9.4.0
+# hadolint ignore=DL3006
+FROM ghcr.io/astral-sh/uv:0.12.7 AS uv
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV \
+    PATH="/opt/appdaemon/bin:${PATH}" \
+    UV_LINK_MODE=copy \
+    UV_NO_CACHE=1 \
+    UV_PYTHON_INSTALL_DIR=/usr/local/share/uv/python \
+    VIRTUAL_ENV=/opt/appdaemon
+
+COPY --from=uv /uv /usr/local/bin/uv
 
 # Copy Python requirements file
 COPY requirements.txt /tmp/
@@ -12,35 +23,49 @@ COPY requirements.txt /tmp/
 COPY rootfs/patches /patches
 
 # Setup base
-# hadolint ignore=DL3003,DL3042
+ARG BUILD_ARCH=amd64
+ARG PYTHON_VERSION="3.13"
+ARG YQ_VERSION="v4.53.6"
+# hadolint ignore=DL3003,DL3008
 RUN \
-    apk add --no-cache --virtual .build-dependencies \
-        build-base=0.5-r3 \
-        python3-dev=3.12.13-r0 \
+    apt-get update \
     \
-    && apk add --no-cache \
-        py3-pip=25.1.1-r1 \
-        py3-wheel=0.46.3-r0 \
-        python3=3.12.13-r0 \
-        yq-go=4.49.2-r5 \
+    && apt-get install -y --no-install-recommends \
+        patch \
     \
-    && pip install -r /tmp/requirements.txt \
+    && YQ_ARCH="${BUILD_ARCH}" \
+    && if [ "${BUILD_ARCH}" = "aarch64" ]; then YQ_ARCH="arm64"; fi \
+    && curl -fsSL -o /usr/bin/yq \
+        "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${YQ_ARCH}" \
+    && chmod a+x /usr/bin/yq \
     \
-    && cd /usr/lib/python3.12/site-packages/ \
+    && uv python install "${PYTHON_VERSION}" \
+    && uv venv --python "${PYTHON_VERSION}" "${VIRTUAL_ENV}" \
+    && uv pip install --requirements /tmp/requirements.txt \
+    \
+    && cd "${VIRTUAL_ENV}/lib/python${PYTHON_VERSION}/site-packages/" \
     && patch -p1 < /patches/force_recompile.patch \
     \
-    && find /usr \
-        \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \
-        -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+    && find /usr/local/share/uv/python "${VIRTUAL_ENV}" \
+        \( \
+            \( -type d -a \( -name test -o -name tests -o -name idlelib \
+                -o -name tkinter -o -name turtledemo -o -name ensurepip \
+                -o -name __pycache__ \) \) \
+            -o \( -type f -a \( -name '*.a' -o -name '*.pyc' -o -name '*.pyo' \) \) \
+        \) \
         -exec rm -rf '{}' + \
     \
-    && apk del --no-cache --purge .build-dependencies
+    && apt-get purge -y --auto-remove patch \
+    && apt-get clean \
+    && rm -fr \
+        /tmp/* \
+        /var/{cache,log}/* \
+        /var/lib/apt/lists/*
 
 # Copy root filesystem
 COPY rootfs /
 
 # Build arguments
-ARG BUILD_ARCH
 ARG BUILD_DATE
 ARG BUILD_DESCRIPTION
 ARG BUILD_NAME
