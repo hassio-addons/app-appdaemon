@@ -9,7 +9,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ENV \
     PATH="/opt/appdaemon/bin:${PATH}" \
-    UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_NO_CACHE=1 \
     UV_PYTHON_INSTALL_DIR=/usr/local/share/uv/python \
@@ -36,7 +35,7 @@ RUN \
     \
     && YQ_ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then YQ_ARCH="arm64"; fi \
-    && curl -L -s -o /usr/bin/yq \
+    && curl -fsSL -o /usr/bin/yq \
         "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${YQ_ARCH}" \
     && chmod a+x /usr/bin/yq \
     \
@@ -48,9 +47,12 @@ RUN \
     && patch -p1 < /patches/force_recompile.patch \
     \
     && find /usr/local/share/uv/python "${VIRTUAL_ENV}" \
-        \( -type d -a \( -name test -o -name tests -o -name idlelib \
-            -o -name tkinter -o -name turtledemo -o -name ensurepip \) \) \
-        -o \( -type f -a \( -name '*.a' -o -name '*.pyc' -o -name '*.pyo' \) \) \
+        \( \
+            \( -type d -a \( -name test -o -name tests -o -name idlelib \
+                -o -name tkinter -o -name turtledemo -o -name ensurepip \
+                -o -name __pycache__ \) \) \
+            -o \( -type f -a \( -name '*.a' -o -name '*.pyc' -o -name '*.pyo' \) \) \
+        \) \
         -exec rm -rf '{}' + \
     \
     && apt-get purge -y --auto-remove patch \
