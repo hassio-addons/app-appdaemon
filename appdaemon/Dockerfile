@@ -40,7 +40,7 @@ RUN \
     && chmod a+x /usr/bin/yq \
     \
     && uv python install "${PYTHON_VERSION}" \
-    && uv venv --python "${PYTHON_VERSION}" "${VIRTUAL_ENV}" \
+    && uv venv --seed --python "${PYTHON_VERSION}" "${VIRTUAL_ENV}" \
     && uv pip install --requirements /tmp/requirements.txt \
     \
     && cd "${VIRTUAL_ENV}/lib/python${PYTHON_VERSION}/site-packages/" \
