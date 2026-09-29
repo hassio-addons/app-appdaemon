@@ -25,7 +25,7 @@ COPY rootfs/patches /patches
 # Setup base
 ARG BUILD_ARCH=amd64
 ARG PYTHON_VERSION="3.13"
-ARG YQ_VERSION="v4.53.6"
+ARG YQ_VERSION="v4.54.1"
 # hadolint ignore=DL3003,DL3008
 RUN \
     apt-get update \
