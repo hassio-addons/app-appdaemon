@@ -1,6 +1,6 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:9.5.0
 # hadolint ignore=DL3006
-FROM ghcr.io/astral-sh/uv:0.12.24 AS uv
+FROM ghcr.io/astral-sh/uv:0.13.0 AS uv
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
