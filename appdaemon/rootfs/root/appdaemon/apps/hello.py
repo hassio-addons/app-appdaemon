@@ -1,7 +1,7 @@
 import appdaemon.plugins.hass.hassapi as hass
 
 #
-# Hellow World App
+# Hello World App
 #
 # Args:
 #
