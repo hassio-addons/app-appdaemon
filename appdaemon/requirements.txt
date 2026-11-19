@@ -1,1 +1,1 @@
-appdaemon==4.5.14
+appdaemon==4.5.16
